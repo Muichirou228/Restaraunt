@@ -108,9 +108,9 @@ Window {
                 mainWindow.hide();
                 var component = Qt.createComponent("../tables_booking.qml")
                 var tablesWindow = component.createObject(null)
-                //tablesWindow.closing.connect(function() {
-                //mainWindow.show();
-                //})
+                tablesWindow.closing.connect(function() {
+                mainWindow.show();
+                })
                 tablesWindow.show();
             }
         }

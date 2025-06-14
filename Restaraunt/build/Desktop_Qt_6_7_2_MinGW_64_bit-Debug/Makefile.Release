@@ -60,11 +60,13 @@ OBJECTS       = release/databasehandler.o \
 		release/qrc_qmake_qmake_immediate.o \
 		release/moc_databasehandler.o
 
-DIST          = birdie.png \
+DIST          = TablesScheme.qml \
+		birdie.png \
 		booking.png \
 		booking_changed.png \
 		image.ico \
-		tables_booking.qml ..\..\databasehandler.h ..\..\databasehandler.cpp \
+		tables_booking.qml \
+		tick.png ..\..\databasehandler.h ..\..\databasehandler.cpp \
 		..\..\main.cpp
 QMAKE_TARGET  = Restaraunt
 DESTDIR        = release\ #avoid trailing-slash linebreak
@@ -120,9 +122,11 @@ release/qrc_qmake_resources.cpp: release/qmake_resources.qrc \
 release/qrc_qmake_qmake_immediate.cpp: release/qmake_qmake_immediate.qrc \
 		C:/Qt/6.7.2/mingw_64/bin/rcc.exe \
 		../../tables_booking.qml \
+		../../TablesScheme.qml \
 		../../booking_changed.png \
 		../../booking.png \
-		../../birdie.png
+		../../birdie.png \
+		../../tick.png
 	C:\Qt\6.7.2\mingw_64\bin\rcc.exe -name qmake_qmake_immediate --no-zstd release\qmake_qmake_immediate.qrc -o release\qrc_qmake_qmake_immediate.cpp
 
 compiler_moc_predefs_make_all: release/moc_predefs.h

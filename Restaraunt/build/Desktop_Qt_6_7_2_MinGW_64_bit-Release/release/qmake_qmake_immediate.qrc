@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+<file alias="TablesScheme.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/TablesScheme.qml</file>
+<file alias="birdie.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/birdie.png</file>
+<file alias="booking.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/booking.png</file>
+<file alias="booking_changed.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/booking_changed.png</file>
+<file alias="tables_booking.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/tables_booking.qml</file>
+</qresource>
+</RCC>

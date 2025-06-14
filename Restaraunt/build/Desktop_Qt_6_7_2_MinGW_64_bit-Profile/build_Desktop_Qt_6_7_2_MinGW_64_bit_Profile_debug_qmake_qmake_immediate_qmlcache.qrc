@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file alias="TablesScheme.qml">../../TablesScheme.qml</file>
+        <file alias="birdie.png">../../birdie.png</file>
+        <file alias="booking.png">../../booking.png</file>
+        <file alias="booking_changed.png">../../booking_changed.png</file>
+        <file alias="tables_booking.qml">../../tables_booking.qml</file>
+    </qresource>
+</RCC>

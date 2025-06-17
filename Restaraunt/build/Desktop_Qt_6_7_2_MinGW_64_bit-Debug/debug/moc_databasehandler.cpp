@@ -38,14 +38,14 @@ namespace {
 struct qt_meta_stringdata_CLASSdatabaseHandlerENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSdatabaseHandlerENDCLASS = QtMocHelpers::stringData(
     "databaseHandler",
-    "bookingsFetched",
+    "bookingsReady",
     "",
     "QList<int>",
     "bookedTables",
     "handleNetworkReply",
     "QNetworkReply*",
     "reply",
-    "fetchBookingsForDate",
+    "getBookingsOnDate",
     "date"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
@@ -101,13 +101,13 @@ Q_CONSTINIT const QMetaObject databaseHandler::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<QList<int>, std::true_type>,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<databaseHandler, std::true_type>,
-        // method 'bookingsFetched'
+        // method 'bookingsReady'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QList<int> &, std::false_type>,
         // method 'handleNetworkReply'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QNetworkReply *, std::false_type>,
-        // method 'fetchBookingsForDate'
+        // method 'getBookingsOnDate'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
     >,
@@ -120,9 +120,9 @@ void databaseHandler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         auto *_t = static_cast<databaseHandler *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->bookingsFetched((*reinterpret_cast< std::add_pointer_t<QList<int>>>(_a[1]))); break;
+        case 0: _t->bookingsReady((*reinterpret_cast< std::add_pointer_t<QList<int>>>(_a[1]))); break;
         case 1: _t->handleNetworkReply((*reinterpret_cast< std::add_pointer_t<QNetworkReply*>>(_a[1]))); break;
-        case 2: _t->fetchBookingsForDate((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 2: _t->getBookingsOnDate((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -147,7 +147,7 @@ void databaseHandler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         int *result = reinterpret_cast<int *>(_a[0]);
         {
             using _t = void (databaseHandler::*)(const QList<int> & );
-            if (_t _q_method = &databaseHandler::bookingsFetched; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            if (_t _q_method = &databaseHandler::bookingsReady; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
             }
@@ -208,7 +208,7 @@ int databaseHandler::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void databaseHandler::bookingsFetched(const QList<int> & _t1)
+void databaseHandler::bookingsReady(const QList<int> & _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

@@ -31,8 +31,9 @@ Item {
 
     // Обновление выбранной даты
     function updateDate() {
-        root.selectedDate = new Date(yearCombo.currentValue, monthCombo.currentIndex, dayCombo.currentValue);
+        root.selectedDate = new Date(Date.UTC(yearCombo.currentValue, monthCombo.currentIndex, dayCombo.currentValue));
         dateChanged(root.selectedDate);
+        console.log ("Selected date is ", root.selectedDate);
     }
 
     // Основной layout
@@ -52,7 +53,7 @@ Item {
         ComboBox {
             id: dayCombo
             model: 31
-            currentIndex: new Date().getDate() - 1
+            currentIndex: new Date().getDate()
             Layout.preferredWidth: 80
             Layout.preferredHeight: 40
             font.pixelSize: 30

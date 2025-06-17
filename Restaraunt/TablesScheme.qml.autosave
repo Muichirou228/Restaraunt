@@ -26,7 +26,7 @@ Item {
                 property bool selected: false
                 radius: 10
                 height: 70
-                color: dbHandler.bookedTables.includes(index + 1) ? "red" : "white"
+                color: dbHandler.bookedTables.includes(index + 1) ? "red" : "white" 
                 MouseArea {
                     hoverEnabled: true
                     anchors.fill: parent

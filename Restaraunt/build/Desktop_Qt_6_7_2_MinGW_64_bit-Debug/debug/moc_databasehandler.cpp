@@ -46,7 +46,8 @@ constexpr auto qt_meta_stringdata_CLASSdatabaseHandlerENDCLASS = QtMocHelpers::s
     "QNetworkReply*",
     "reply",
     "getBookingsOnDate",
-    "date"
+    "date",
+    "clearBookings"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -59,21 +60,22 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSdatabaseHandlerENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
-       1,   41, // properties
+       4,   14, // methods
+       1,   48, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   32,    2, 0x06,    2 /* Public */,
+       1,    1,   38,    2, 0x06,    2 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       5,    1,   35,    2, 0x08,    4 /* Private */,
+       5,    1,   41,    2, 0x08,    4 /* Private */,
 
  // methods: name, argc, parameters, tag, flags, initial metatype offsets
-       8,    1,   38,    2, 0x02,    6 /* Public */,
+       8,    1,   44,    2, 0x02,    6 /* Public */,
+      10,    0,   47,    2, 0x02,    8 /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
@@ -83,6 +85,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSdatabaseHandlerENDCLASS[] = {
 
  // methods: parameters
     QMetaType::Void, QMetaType::QString,    9,
+    QMetaType::Void,
 
  // properties: name, type, flags
        4, 0x80000000 | 3, 0x00015009, uint(0), 0,
@@ -109,7 +112,9 @@ Q_CONSTINIT const QMetaObject databaseHandler::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<QNetworkReply *, std::false_type>,
         // method 'getBookingsOnDate'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
+        // method 'clearBookings'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
@@ -123,6 +128,7 @@ void databaseHandler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         case 0: _t->bookingsReady((*reinterpret_cast< std::add_pointer_t<QList<int>>>(_a[1]))); break;
         case 1: _t->handleNetworkReply((*reinterpret_cast< std::add_pointer_t<QNetworkReply*>>(_a[1]))); break;
         case 2: _t->getBookingsOnDate((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 3: _t->clearBookings(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -191,13 +197,13 @@ int databaseHandler::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     }else if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
             || _c == QMetaObject::ResetProperty || _c == QMetaObject::BindableProperty
             || _c == QMetaObject::RegisterPropertyMetaType) {

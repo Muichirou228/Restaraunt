@@ -6,6 +6,6 @@
 <file alias="booking_changed.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/booking_changed.png</file>
 <file alias="tables_booking.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/tables_booking.qml</file>
 <file alias="tick.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/tick.png</file>
-<file alias="Calendar.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/Calendar.qml</file>
+<file alias="CustomCalendar.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/CustomCalendar.qml</file>
 </qresource>
 </RCC>

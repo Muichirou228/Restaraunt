@@ -7,6 +7,6 @@
         <file alias="booking_changed.png">../../booking_changed.png</file>
         <file alias="tables_booking.qml">../../tables_booking.qml</file>
         <file alias="tick.png">../../tick.png</file>
-        <file alias="Calendar.qml">../../Calendar.qml</file>
+        <file alias="CustomCalendar.qml">../../CustomCalendar.qml</file>
     </qresource>
 </RCC>

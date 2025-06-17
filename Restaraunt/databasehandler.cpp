@@ -21,6 +21,10 @@ void databaseHandler::getBookingsOnDate(const QString &date) {
     });
 }
 
+void databaseHandler::clearBookings() {
+    m_bookedTables.clear();
+}
+
 void databaseHandler::handleNetworkReply(QNetworkReply *reply) {
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << "Network error:" << reply->errorString();

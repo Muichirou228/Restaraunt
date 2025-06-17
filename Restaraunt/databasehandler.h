@@ -19,6 +19,7 @@ public:
     explicit databaseHandler(QObject *parent = nullptr);
 
     Q_INVOKABLE void getBookingsOnDate(const QString &date);
+    Q_INVOKABLE void clearBookings();
     QList<int> bookedTables() const;
 
 signals:

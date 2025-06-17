@@ -2,7 +2,7 @@ debug/databasehandler.o
 debug/main.o
 debug/main_qml.o
 debug/tables_booking_qml.o
-debug/Calendar_qml.o
+debug/CustomCalendar_qml.o
 debug/TablesScheme_qml.o
 debug/qmlcache_loader.o
 debug/qrc_build_Desktop_Qt_6_7_2_MinGW_64_bit_Profile_debug_qmake_resources_qmlcache.o

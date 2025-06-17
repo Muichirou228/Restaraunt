@@ -9,7 +9,18 @@ Item {
     anchors.right: parent.right
     anchors.bottom: parent.bottom
     property int tableWarning: 0
-
+    // function resetTables() {
+    //     for (var i = 0; i < repeater.count; i++) {
+    //         var item = repeater.itemAt(i);
+    //         if (item.selected) {
+    //             item.color = "white";
+    //             item.selected = false;
+    //             item.children[1].color = "black";
+    //         }
+    //         tableWarning = 0;
+    //         dbHandler.clearBookings();
+    //     }
+    // }
     signal tableClicked(int tableWarning)
     GridLayout {
         id: grid
@@ -27,8 +38,9 @@ Item {
                 radius: 10
                 height: 70
                 color: dbHandler.bookedTables.includes(index + 1) ? "red" : "white"
+                enabled: dbHandler.bookedTables.includes(index + 1) ? false : true
                 MouseArea {
-                    hoverEnabled: true
+                    hoverEnabled: dbHandler.bookedTables.includes(index + 1) ? false : true
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onEntered: {

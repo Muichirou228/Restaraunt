@@ -12,7 +12,6 @@ Window {
     property int tableWarning: 0
     Component.onCompleted: {
         tableWarning = 0
-        //dbHandler.getBookingsOnDate("2025-10-20")
     }
 
     Text {
@@ -38,6 +37,9 @@ Window {
             var newDate = selectedDate.toISOString().split('T')[0]
             console.log("New date = ", newDate)
             dbHandler.getBookingsOnDate(newDate);
+            //tables.resetTables();
+            tableWarning = 0;
+            confirmrect.visible = false;
         }
     }
 

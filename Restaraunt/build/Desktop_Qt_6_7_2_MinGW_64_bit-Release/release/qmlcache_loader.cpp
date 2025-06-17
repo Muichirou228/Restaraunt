@@ -26,6 +26,13 @@ namespace _0x5f__tables_booking_qml {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
     };
 }
+namespace _0x5f__Calendar_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
 
 }
 namespace {
@@ -43,6 +50,7 @@ Registry::Registry() {
     resourcePathToCachedUnit.insert(QStringLiteral("/Restaraunt/main.qml"), &QmlCacheGeneratedCode::_0x5f_Restaraunt_main_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/TablesScheme.qml"), &QmlCacheGeneratedCode::_0x5f__TablesScheme_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/tables_booking.qml"), &QmlCacheGeneratedCode::_0x5f__tables_booking_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/Calendar.qml"), &QmlCacheGeneratedCode::_0x5f__Calendar_qml::unit);
     QQmlPrivate::RegisterQmlUnitCacheHook registration;
     registration.structVersion = 0;
     registration.lookupCachedQmlUnit = &lookupCachedUnit;

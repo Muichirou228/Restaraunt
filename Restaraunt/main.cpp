@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include "databaseHandler.h"
 
 int main(int argc, char *argv[])
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
         },
         Qt::QueuedConnection);
     databaseHandler dbHandler;
+    engine.rootContext()->setContextProperty("dbHandler", &dbHandler);
     engine.load(url);
 
     return app.exec();

@@ -29,10 +29,40 @@ Window {
         anchors.topMargin: 40
     }
 
+    CustomCalendar {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: bookText.bottom
+        anchors.topMargin: 50
+    }
+
     TablesScheme {
+        id: tables
         onTableClicked: function (tableWarning) {
             bookWindow.tableWarning = tableWarning
-            if (bookWindow.tableWarning > 0) confirmrect.visible = true; else confirmrect.visible = false;
+            if (check.checked && bookWindow.tableWarning > 0) confirmrect.visible = true; else confirmrect.visible = false;
+        }
+    }
+
+    CheckBox {
+        id: check
+        text: "Я прочитал(а) политику ресторана"
+        font.family: "Verdana"
+        font.bold: true
+        spacing: 20
+        font.pixelSize: 20
+        anchors.bottom: confirm.top
+        anchors.bottomMargin: 35
+        anchors.horizontalCenter: parent.horizontalCenter
+        contentItem: Text{
+            text: parent.text
+            font: parent.font
+            color: "white"  // Белый цвет текста
+            verticalAlignment: Text.AlignVCenter
+            leftPadding: parent.indicator.width + parent.spacing  // Учитываем увеличенный spacing
+        }
+        onCheckedChanged: {
+            if (check.checked && bookWindow.tableWarning > 0)
+                confirmrect.visible = true; else confirmrect.visible = false;
         }
     }
 

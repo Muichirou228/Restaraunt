@@ -9,6 +9,7 @@ Item {
     anchors.right: parent.right
     anchors.bottom: parent.bottom
     property int tableWarning: 0
+
     signal tableClicked(int tableWarning)
     GridLayout {
         id: grid
@@ -18,6 +19,7 @@ Item {
         rows: 4
         columns: 5
         Repeater {
+            id: repeater
             model: 20
             delegate: Rectangle {
                 width: 70

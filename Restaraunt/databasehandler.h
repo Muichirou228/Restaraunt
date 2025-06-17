@@ -5,19 +5,25 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
+
 class databaseHandler : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY (QList<int> bookedTables READ bookedTables NOTIFY bookingsFetched)
 public:
     explicit databaseHandler(QObject *parent = nullptr);
-    ~databaseHandler();
-public slots:
-    void networkReplyReadyRead();
-signals:
 
+    Q_INVOKABLE void fetchBookingsForDate(const QString &date);
+    QList<int> bookedTables() const;
+
+signals:
+    void bookingsFetched(const QList<int> &bookedTables);
+private slots:
+    void handleNetworkReply(QNetworkReply *reply);
 private:
     QNetworkAccessManager *m_networkManager;
-    QNetworkReply *m_networkReply;
+    QList<int> m_bookedTables;
 };
 
 #endif // DATABASEHANDLER_H

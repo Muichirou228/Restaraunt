@@ -60,7 +60,8 @@ OBJECTS       = release/databasehandler.o \
 		release/qrc_qmake_qmake_immediate.o \
 		release/moc_databasehandler.o
 
-DIST          = TablesScheme.qml \
+DIST          = CustomCalendar.qml \
+		TablesScheme.qml \
 		birdie.png \
 		booking.png \
 		booking_changed.png \
@@ -122,6 +123,7 @@ release/qrc_qmake_resources.cpp: release/qmake_resources.qrc \
 release/qrc_qmake_qmake_immediate.cpp: release/qmake_qmake_immediate.qrc \
 		C:/Qt/6.7.2/mingw_64/bin/rcc.exe \
 		../../tables_booking.qml \
+		../../CustomCalendar.qml \
 		../../TablesScheme.qml \
 		../../booking_changed.png \
 		../../booking.png \

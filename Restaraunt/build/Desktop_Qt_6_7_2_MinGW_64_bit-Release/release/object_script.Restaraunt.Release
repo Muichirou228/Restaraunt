@@ -1,0 +1,10 @@
+release/databasehandler.o
+release/main.o
+release/main_qml.o
+release/tables_booking_qml.o
+release/Calendar_qml.o
+release/TablesScheme_qml.o
+release/qmlcache_loader.o
+release/qrc_build_Desktop_Qt_6_7_2_MinGW_64_bit_Release_release_qmake_resources_qmlcache.o
+release/qrc_build_Desktop_Qt_6_7_2_MinGW_64_bit_Release_release_qmake_qmake_immediate_qmlcache.o
+release/moc_databasehandler.o

@@ -9,18 +9,38 @@ Item {
     anchors.right: parent.right
     anchors.bottom: parent.bottom
     property int tableWarning: 0
-    // function resetTables() {
-    //     for (var i = 0; i < repeater.count; i++) {
-    //         var item = repeater.itemAt(i);
-    //         if (item.selected) {
-    //             item.color = "white";
-    //             item.selected = false;
-    //             item.children[1].color = "black";
-    //         }
-    //         tableWarning = 0;
-    //         dbHandler.clearBookings();
-    //     }
-    // }
+    property var bookedTables : []
+    function updateBookedTables(tables) {
+            bookedTables = tables;
+            applyTableColors();
+    }
+
+    function applyTableColors() {
+        for (var i = 0; i < repeater.count; i++) {
+            var item = repeater.itemAt(i);
+            if (item) {
+                if (bookedTables.includes(i+1)) {
+                    item.color = "red";
+                    item.enabled = false;
+                    item.children[1].color = "white";
+                    item.children[0].hoverEnabled = false;
+                } else {
+                    item.color = item.selected ? "#006400" : "white";
+                    item.enabled = true;
+                    item.children[1].color = item.selected ? "white" : "black";
+                    item.children[0].hoverEnabled = true;
+                }
+                item.selected = false;
+            }
+        }
+    }
+
+    function resetTables() {
+        tableWarning = 0;
+        bookedTables = [];
+        applyTableColors();
+    }
+
     signal tableClicked(int tableWarning)
     GridLayout {
         id: grid
@@ -37,10 +57,10 @@ Item {
                 property bool selected: false
                 radius: 10
                 height: 70
-                color: dbHandler.bookedTables.includes(index + 1) ? "red" : "white"
-                enabled: dbHandler.bookedTables.includes(index + 1) ? false : true
+                color: "white"
+                enabled: true
                 MouseArea {
-                    hoverEnabled: dbHandler.bookedTables.includes(index + 1) ? false : true
+                    hoverEnabled: true
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onEntered: {
@@ -85,4 +105,11 @@ Item {
             }
         }
     }
+
+    Connections {
+            target: dbHandler
+            onBookingsReady: {
+                updateBookedTables(bookedTables);
+            }
+        }
 }

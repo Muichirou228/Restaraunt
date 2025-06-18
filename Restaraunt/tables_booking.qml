@@ -36,9 +36,8 @@ Window {
         onDateChanged: {
             var newDate = selectedDate.toISOString().split('T')[0]
             console.log("New date = ", newDate)
+            tables.resetTables();
             dbHandler.getBookingsOnDate(newDate);
-            //tables.resetTables();
-            tableWarning = 0;
             confirmrect.visible = false;
         }
     }

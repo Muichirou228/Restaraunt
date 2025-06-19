@@ -8,5 +8,9 @@
         <file alias="tables_booking.qml">../../tables_booking.qml</file>
         <file alias="tick.png">../../tick.png</file>
         <file alias="CustomCalendar.qml">../../CustomCalendar.qml</file>
+        <file alias="back.png">../../back.png</file>
+        <file alias="BackButton.qml">../../BackButton.qml</file>
+        <file alias="bookForm.qml">../../bookForm.qml</file>
+        <file alias="endBooking.qml">../../endBooking.qml</file>
     </qresource>
 </RCC>

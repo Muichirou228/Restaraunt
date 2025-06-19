@@ -33,6 +33,27 @@ namespace _0x5f__CustomCalendar_qml {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
     };
 }
+namespace _0x5f__BackButton_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f__bookForm_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f__endBooking_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
 
 }
 namespace {
@@ -51,6 +72,9 @@ Registry::Registry() {
     resourcePathToCachedUnit.insert(QStringLiteral("/TablesScheme.qml"), &QmlCacheGeneratedCode::_0x5f__TablesScheme_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/tables_booking.qml"), &QmlCacheGeneratedCode::_0x5f__tables_booking_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/CustomCalendar.qml"), &QmlCacheGeneratedCode::_0x5f__CustomCalendar_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/BackButton.qml"), &QmlCacheGeneratedCode::_0x5f__BackButton_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/bookForm.qml"), &QmlCacheGeneratedCode::_0x5f__bookForm_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/endBooking.qml"), &QmlCacheGeneratedCode::_0x5f__endBooking_qml::unit);
     QQmlPrivate::RegisterQmlUnitCacheHook registration;
     registration.structVersion = 0;
     registration.lookupCachedQmlUnit = &lookupCachedUnit;

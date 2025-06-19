@@ -7,5 +7,9 @@
 <file alias="tables_booking.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/tables_booking.qml</file>
 <file alias="tick.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/tick.png</file>
 <file alias="CustomCalendar.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/CustomCalendar.qml</file>
+<file alias="back.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/back.png</file>
+<file alias="BackButton.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/BackButton.qml</file>
+<file alias="bookForm.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/bookForm.qml</file>
+<file alias="endBooking.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/endBooking.qml</file>
 </qresource>
 </RCC>

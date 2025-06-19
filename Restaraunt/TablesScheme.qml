@@ -9,17 +9,36 @@ Item {
     anchors.right: parent.right
     anchors.bottom: parent.bottom
     property int tableWarning: 0
+    property bool isLoading
     property var bookedTables : []
     function updateBookedTables(tables) {
             bookedTables = tables;
+            isLoading = false;
             applyTableColors();
+    }
+
+    function getBookedTables() {
+        var result = [];
+        for (var i = 0; i < repeater.count; i++) {
+            var item = repeater.itemAt(i);
+            if (item.selected) {
+                result.push(item.children[1].text);
+            }
+        }
+        return result.join(" "); // Возвращаем строку с номерами через пробел
     }
 
     function applyTableColors() {
         for (var i = 0; i < repeater.count; i++) {
             var item = repeater.itemAt(i);
             if (item) {
-                if (bookedTables.includes(i+1)) {
+                if (isLoading) {
+                    item.color = "white";
+                    item.children[0].hoverEnabled = false
+                    item.children[1].color = "black";
+                    item.enabled = false;
+                }
+                else if (bookedTables.includes(i+1)) {
                     item.color = "red";
                     item.enabled = false;
                     item.children[1].color = "white";
@@ -38,6 +57,7 @@ Item {
     function resetTables() {
         tableWarning = 0;
         bookedTables = [];
+        isLoading = true;
         applyTableColors();
     }
 

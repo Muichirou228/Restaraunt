@@ -2,8 +2,11 @@ debug/databasehandler.o
 debug/main.o
 debug/main_qml.o
 debug/tables_booking_qml.o
+debug/bookForm_qml.o
 debug/CustomCalendar_qml.o
 debug/TablesScheme_qml.o
+debug/endBooking_qml.o
+debug/BackButton_qml.o
 debug/qmlcache_loader.o
 debug/qrc_build_Desktop_Qt_6_7_2_MinGW_64_bit_Release_debug_qmake_resources_qmlcache.o
 debug/qrc_build_Desktop_Qt_6_7_2_MinGW_64_bit_Release_debug_qmake_qmake_immediate_qmlcache.o

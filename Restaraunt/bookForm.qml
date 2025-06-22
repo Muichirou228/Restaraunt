@@ -5,7 +5,7 @@ import QtQuick.Controls
         property string bookingDate: ""
         property string tablesBook: ""
         property string id_client_for_booking: ""
-        property bool bookingStatus: true
+        property bool isProcessing: false
         color: "black"
         BackButton {
             onButtonClicked: {
@@ -180,30 +180,36 @@ import QtQuick.Controls
         Connections {
             target: dbHandler
             onClientChecked: (clientId) => {
-            id_client_for_booking = clientId;
-            console.log("Client ID:", clientId);
+                console.log("Client ID:", clientId);
 
-            // Преобразуем строку столов в массив
-            var tablesArray = tablesBook.split(' ').filter(item => item !== "").map(item => parseInt(item));
+                // Преобразуем строку столов в массив
+                var tablesArray = tablesBook.split(' ').filter(item => item !== "").map(item => parseInt(item));
 
-            if (id_client_for_booking === "") {
-                dbHandler.addNewClient(firstNameInput.text, secondNameInput.text,
-                thirdNameInput.text, parseInt(ageInput.text));
-            } else {
-                dbHandler.addNewBooking(bookingDate, tablesArray, id_client_for_booking);
-            }
-
+                if (clientId === "") {
+                    console.log("Щас добавим юзера ");
+                    dbHandler.addNewClient(firstNameInput.text, secondNameInput.text,
+                    thirdNameInput.text, parseInt(ageInput.text));
+                } else {
+                    console.log("Юзер уже есть, щас забронируем столы");
+                    for (var i = 0; i < tablesArray.length; i++) {
+                        console.log (tablesArray[i].toString());
+                    }
+                    dbHandler.addNewBooking(bookingDate, tablesArray, clientId);
+                }
             }
             onClientAdded: (clientId) => {
                 var tablesArray = tablesBook.split(' ').filter(item => item !== "").map(item => parseInt(item));
+                console.log("Юзера добавили, щас заброниурем, дата, и айди равны ", bookingDate, clientId);
+                console.log("Юзера добавили, щас заброниурем, столы равны ");
+                for (var i = 0; i < tablesArray.length; i++) {
+                    console.log (tablesArray[i].toString());
+                }
                 dbHandler.addNewBooking(bookingDate, tablesArray, clientId);
             }
             onBookingAdded: (success, message) => {
                 console.log (message);
-                bookingStatus = success;
-                if (bookingStatus) {
+                if (success) {
                     stackViewForBookings.push("../endBooking.qml");
-                    //bookWindow.tables.bookedTables = {};
                 }
             }
         }

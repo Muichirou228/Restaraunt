@@ -18,7 +18,10 @@ RESOURCES += \
         back.png \
         BackButton.qml \
         bookForm.qml \
-        endBooking.qml
+        endBooking.qml \
+        enter.png \
+        waiter_main.qml \
+        TablesSchemeForWaiters.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -40,12 +43,15 @@ DISTFILES += \
     BackButton.qml \
     CustomCalendar.qml \
     TablesScheme.qml \
+    TablesSchemeForWaiters.qml \
     back.png \
     birdie.png \
     bookForm.qml \
     booking.png \
     booking_changed.png \
     endBooking.qml \
+    enter.png \
     image.ico \
     tables_booking.qml \
-    tick.png
+    tick.png \
+    waiter_main.qml

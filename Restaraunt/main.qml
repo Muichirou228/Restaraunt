@@ -7,6 +7,21 @@ Window {
     maximumWidth: 640
     maximumHeight: 440
     visible: true
+    Connections {
+        target: dbHandler
+        onCodeChecked: (name) => {
+            if (name !== "") {
+                mainWindow.hide();
+                var component = Qt.createComponent("../waiter_main.qml")
+                var waiterWindow = component.createObject(null, {waiterName : name})
+                waiterWindow.closing.connect(function() {
+                mainWindow.show();
+                })
+                waiterWindow.show();
+            }
+        }
+    }
+
     Image {
         id: birdie
         source: "../birdie.png"
@@ -17,6 +32,7 @@ Window {
             left: parent.left
         }
     }
+
 
     Text {
         id: signinText
@@ -57,6 +73,33 @@ Window {
         placeholderText: "Введите код"
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+    }
+
+    Item {
+        width: 50
+        height: 50
+        anchors {
+            left: codeInput.right
+            top: codeInput.top
+            leftMargin: 15
+            bottomMargin: 10
+        }
+        Image {
+            anchors.fill: parent
+            source: "../enter.png"
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                if (codeInput.text === "" || codeInput.text.length < 6) {
+                    codeInput.text = "";
+                    codeInput.focus = false;
+                    codeInput.placeholderText = "6 цифр!!!"
+                } else {
+                    dbHandler.checkIfUserCodeExists(codeInput.text);
+                }
+            }
+        }
     }
 
     Rectangle {

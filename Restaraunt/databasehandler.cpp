@@ -97,7 +97,7 @@ void databaseHandler::checkIfClientExists(QString firstName, QString secondName,
                 }
             }
         }
-
+        qDebug() << "Сигнал сработал clientChecked";
         emit clientChecked(foundId);
         reply->deleteLater();
     });
@@ -215,6 +215,87 @@ QList<int> databaseHandler::convertToListFromString(QString text) {
     }
 
     return result;
+}
+
+void databaseHandler::checkIfUserCodeExists(QString code) {
+    if (code.isEmpty()) {
+        qDebug() << "Empty waiter code provided";
+        emit codeChecked(""); // Возвращаем пустую строку
+        return;
+    }
+
+    // Формируем URL запроса
+    QUrl url(QString("https://qtrestaraunt-default-rtdb.firebaseio.com/waiters.json?orderBy=\"code\"&equalTo=\"%1\"")
+                 .arg(QString(QUrl::toPercentEncoding(code))));
+
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // Отправляем асинхронный запрос
+    QNetworkReply *reply = m_networkManager->get(request);
+
+    // Обрабатываем ответ
+    connect(reply, &QNetworkReply::finished, [this, reply, code]() {
+        QString result = "";
+        QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+        QJsonObject waiters = doc.object();
+        if (reply->error() == QNetworkReply::NoError) {
+
+            // Если есть хотя бы один официант с таким кодом
+            if (!waiters.isEmpty()) {
+                qDebug() << "Valid waiter code found:" << code;
+            }
+        } else {
+            qDebug() << "Error checking waiter code:" << reply->errorString();
+        }
+
+        for (const QString &key : waiters.keys()) {
+            QJsonObject waiter = waiters.value(key).toObject();
+            if (waiter.contains("name")) {
+                result = waiter["name"].toString();
+                qDebug() << "Found waiter with name " << result;
+                break; // Берем первого найденного
+            }
+        }
+
+        emit codeChecked(result); // Отправляем результат
+        reply->deleteLater(); // Удаляем reply объект
+    });
+}
+
+QString databaseHandler::checkTableStatus(QString table_num) {
+    QUrl url(QString("https://qtrestaraunt-default-rtdb.firebaseio.com/tables.json?orderBy=\"table_num\"&equalTo=\"%1\"")
+                 .arg(QString(QUrl::toPercentEncoding(table_num))));
+
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = m_networkManager->get(request);
+
+    connect(reply, &QNetworkReply::finished, [this, reply, table_num]() {
+        QString result = "";
+        QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+        QJsonObject waiters = doc.object();
+        if (reply->error() == QNetworkReply::NoError) {
+
+            // Если есть хотя бы один официант с таким кодом
+            if (!waiters.isEmpty()) {
+                qDebug() << "Valid table info found for number " << table_num;
+            }
+        }
+
+        for (const QString &key : waiters.keys()) {
+            QJsonObject waiter = waiters.value(key).toObject();
+            if (waiter.contains("status")) {
+                result = waiter["status"].toString();
+                qDebug() << "Found table number " << table_num << "with status " << result;
+                break;
+            }
+        }
+
+        tableStatusChecked(table_num, result); // Отправляем результат
+        reply->deleteLater(); // Удаляем reply объект
+    });
 }
 
 

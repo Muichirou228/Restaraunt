@@ -14,5 +14,9 @@
 <file alias="enter.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/enter.png</file>
 <file alias="waiter_main.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/waiter_main.qml</file>
 <file alias="TablesSchemeForWaiters.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/TablesSchemeForWaiters.qml</file>
+<file alias="OrderInTable.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/OrderInTable.qml</file>
+<file alias="TableInProcess.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/TableInProcess.qml</file>
+<file alias="recipe.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/recipe.png</file>
+<file alias="RecipeButton.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/RecipeButton.qml</file>
 </qresource>
 </RCC>

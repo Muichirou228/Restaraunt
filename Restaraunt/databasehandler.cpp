@@ -298,6 +298,137 @@ QString databaseHandler::checkTableStatus(QString table_num) {
     });
 }
 
+void databaseHandler::getTableOrders(int tableNumber)
+{
+    // 1. Находим активный заказ для указанного стола из таблицы tables
+    QUrl tablesUrl(QString("https://qtrestaraunt-default-rtdb.firebaseio.com/tables.json?orderBy=\"table_num\"&equalTo=\"%1\"").arg(tableNumber));
 
+    QNetworkReply *tablesReply = m_networkManager->get(QNetworkRequest(tablesUrl));
 
+    connect(tablesReply, &QNetworkReply::finished, [this, tablesReply]() {
+        if (tablesReply->error() == QNetworkReply::NoError) {
+            QJsonDocument doc = QJsonDocument::fromJson(tablesReply->readAll());
+            QJsonObject tablesData = doc.object();
+
+            // Ищем таблицу с нужным номером
+            for (const QString &tableKey : tablesData.keys()) {
+                QJsonObject table = tablesData[tableKey].toObject();
+                if (table.contains("order_num")) {
+                    QString orderNum = table["order_num"].toString();
+                    qDebug() << "Found order num for table " << "and its " << orderNum;
+                    // 2. Проверяем статус заказа в orders
+                    QUrl ordersUrl(QString("https://qtrestaraunt-default-rtdb.firebaseio.com/orders/%1.json").arg(orderNum));
+                    QNetworkReply *ordersReply = m_networkManager->get(QNetworkRequest(ordersUrl));
+
+                    connect(ordersReply, &QNetworkReply::finished, [this, ordersReply, orderNum]() {
+                        if (ordersReply->error() == QNetworkReply::NoError) {
+                            QJsonDocument orderDoc = QJsonDocument::fromJson(ordersReply->readAll());
+                            QJsonObject orderData = orderDoc.object();
+
+                            // Проверяем, что заказ активен (не завершен)
+                            if (orderData["status"].toString() != "completed") {
+                                // 3. Получаем позиции заказа из order_items
+                                qDebug() << "FETORDERITEMS";
+                                fetchOrderItems(orderNum);
+                            }
+                        }
+                        ordersReply->deleteLater();
+                    });
+                    break;
+                }
+            }
+        } else {
+            emit errorOccurred("Failed to fetch table data: " + tablesReply->errorString());
+        }
+        tablesReply->deleteLater();
+    });
+}
+
+void databaseHandler::fetchOrderItems(const QString &orderId)
+{
+    // Получаем все items для конкретного заказа
+    QUrl orderItemsUrl(QString("https://qtrestaraunt-default-rtdb.firebaseio.com/order-items/%1.json").arg(orderId));
+
+    QNetworkReply *orderItemsReply = m_networkManager->get(QNetworkRequest(orderItemsUrl));
+
+    connect(orderItemsReply, &QNetworkReply::finished, [this, orderItemsReply]() {
+        if (orderItemsReply->error() == QNetworkReply::NoError) {
+            QJsonDocument doc = QJsonDocument::fromJson(orderItemsReply->readAll());
+            QJsonObject orderItems = doc.object();
+
+            QVariantList productRequests;
+
+            // Перебираем все items в заказе
+            for (const QString &itemKey : orderItems.keys()) {
+                QJsonObject item = orderItems[itemKey].toObject();
+
+                // Проверяем, что это item с продуктом
+                if (item.contains("id_product")) {
+                    QString productId = item["id_product"].toString();
+                    int quantity = item["product_count"].toInt(1);
+
+                    // Для отладки выведем в консоль
+                    qDebug() << "Found item:" << productId << "Quantity:" << quantity;
+
+                    QVariantMap productRequest;
+                    productRequest["productId"] = productId;
+                    productRequest["quantity"] = quantity;
+                    productRequests.append(productRequest);
+                }
+            }
+
+            if (!productRequests.isEmpty()) {
+                fetchProductsInfo(productRequests);
+            } else {
+                qDebug() << "No items found in order";
+                emit tableOrdersReady(QVariantList());
+            }
+        } else {
+            qDebug() << "Error fetching order items:" << orderItemsReply->errorString();
+            emit errorOccurred("Failed to fetch order items: " + orderItemsReply->errorString());
+        }
+        orderItemsReply->deleteLater();
+    });
+}
+
+void databaseHandler::fetchProductsInfo(const QVariantList &productRequests)
+{
+    // Формируем один запрос для всех продуктов
+    QUrl productsUrl("https://qtrestaraunt-default-rtdb.firebaseio.com/products.json");
+
+    QNetworkReply *productsReply = m_networkManager->get(QNetworkRequest(productsUrl));
+
+    connect(productsReply, &QNetworkReply::finished, [this, productsReply, productRequests]() {
+        if (productsReply->error() == QNetworkReply::NoError) {
+            QJsonDocument doc = QJsonDocument::fromJson(productsReply->readAll());
+            QJsonObject allProducts = doc.object();
+
+            QVariantList orderItems;
+
+            // Сопоставляем запрошенные продукты с их данными
+            for (const QVariant &request : productRequests) {
+                QVariantMap req = request.toMap();
+                QString productId = req["productId"].toString();
+                int quantity = req["quantity"].toInt();
+
+                if (allProducts.contains(productId)) {
+                    QJsonObject product = allProducts[productId].toObject();
+
+                    QVariantMap orderItem;
+                    orderItem["name"] = product["product_name"].toString(); // Из вашей структуры
+                    orderItem["price"] = product["price"].toDouble();      // Из вашей структуры
+                    orderItem["quantity"] = quantity;
+                    orderItem["total"] = orderItem["price"].toDouble() * quantity;
+                    qDebug() << "ALL INFO ABOUT PRODUCTS : " << orderItem["name"] << orderItem["price"] << orderItem["quantity"] << orderItem["total"];
+                    orderItems.append(orderItem);
+                }
+            }
+
+            emit tableOrdersReady(orderItems);
+        } else {
+            emit errorOccurred("Failed to fetch products: " + productsReply->errorString());
+        }
+        productsReply->deleteLater();
+    });
+}
 

@@ -3,8 +3,13 @@ release/main.o
 release/main_qml.o
 release/tables_booking_qml.o
 release/bookForm_qml.o
+release/OrderInTable_qml.o
 release/CustomCalendar_qml.o
+release/RecipeButton_qml.o
+release/waiter_main_qml.o
+release/TablesSchemeForWaiters_qml.o
 release/TablesScheme_qml.o
+release/TableInProcess_qml.o
 release/endBooking_qml.o
 release/BackButton_qml.o
 release/qmlcache_loader.o

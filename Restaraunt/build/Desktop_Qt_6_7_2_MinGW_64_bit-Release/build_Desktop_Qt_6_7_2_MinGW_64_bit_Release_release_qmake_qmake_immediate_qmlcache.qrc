@@ -12,5 +12,12 @@
         <file alias="BackButton.qml">../../BackButton.qml</file>
         <file alias="bookForm.qml">../../bookForm.qml</file>
         <file alias="endBooking.qml">../../endBooking.qml</file>
+        <file alias="enter.png">../../enter.png</file>
+        <file alias="waiter_main.qml">../../waiter_main.qml</file>
+        <file alias="TablesSchemeForWaiters.qml">../../TablesSchemeForWaiters.qml</file>
+        <file alias="OrderInTable.qml">../../OrderInTable.qml</file>
+        <file alias="TableInProcess.qml">../../TableInProcess.qml</file>
+        <file alias="recipe.png">../../recipe.png</file>
+        <file alias="RecipeButton.qml">../../RecipeButton.qml</file>
     </qresource>
 </RCC>

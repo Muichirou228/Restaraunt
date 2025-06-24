@@ -10,24 +10,38 @@ Window {
     visible: true
     color: "black"
     property string waiterName : ""
-    Component.onCompleted: {
-        //tables.updateTablesStatus();
-    }
 
-    Text {
-        color: "white"
-        anchors {
-            left: parent.left
-            top: parent.top
-            margins: 30
+    StackView {
+        id: stackViewForWaiters
+        anchors.fill: parent
+        initialItem: waiterWindowComp
+    }
+    Component {
+        id: waiterWindowComp
+        Item {
+            Text {
+                color: "white"
+                anchors {
+                    left: parent.left
+                    top: parent.top
+                    margins: 30
+                }
+                text: waiterName
+                font.bold: true
+                font.pixelSize: 40
+                font.family: "Verdana"
+            }
+
+            TablesSchemeForWaiters{
+                id: tables
+                onTableClicked: (tableNum) => {
+                    stackViewForWaiters.push("../TableInProcess.qml", {table_num : tableNum})
+                }
+            }
         }
-        text: waiterName
-        font.bold: true
-        font.pixelSize: 40
-        font.family: "Verdana"
     }
 
-    TablesSchemeForWaiters{
-        id: tables
-    }
+
+
+
 }

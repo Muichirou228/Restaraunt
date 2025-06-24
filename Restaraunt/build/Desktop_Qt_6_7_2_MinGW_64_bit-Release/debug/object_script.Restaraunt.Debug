@@ -3,8 +3,13 @@ debug/main.o
 debug/main_qml.o
 debug/tables_booking_qml.o
 debug/bookForm_qml.o
+debug/OrderInTable_qml.o
 debug/CustomCalendar_qml.o
+debug/RecipeButton_qml.o
+debug/waiter_main_qml.o
+debug/TablesSchemeForWaiters_qml.o
 debug/TablesScheme_qml.o
+debug/TableInProcess_qml.o
 debug/endBooking_qml.o
 debug/BackButton_qml.o
 debug/qmlcache_loader.o

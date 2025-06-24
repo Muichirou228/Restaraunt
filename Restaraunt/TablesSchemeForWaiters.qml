@@ -8,7 +8,7 @@ Item {
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.bottom: parent.bottom
-    signal tableClicked(int tableWarning)
+    signal tableClicked(int tableNum)
     property var tableStatus: ({})
     function updateTableStatus(table_num, status) {
         tableStatus[table_num] = status;
@@ -31,6 +31,7 @@ Item {
                 updateTableStatus(tableNum, status);
             }
         }
+
     Component.onCompleted: {
         for (var i = 1; i <= 20; i++) {
             dbHandler.checkTableStatus(i.toString());
@@ -58,14 +59,8 @@ Item {
                     hoverEnabled: true
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
-                    onEntered: {
-
-                    }
-                    onExited: {
-
-                    }
                     onClicked: {
-
+                        tableClicked(index + 1);
                     }
                 }
                 Text {

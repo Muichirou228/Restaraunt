@@ -53,6 +53,10 @@ constexpr auto qt_meta_stringdata_CLASSdatabaseHandlerENDCLASS = QtMocHelpers::s
     "tableStatusChecked",
     "table_num",
     "status",
+    "tableOrdersReady",
+    "orders",
+    "errorOccurred",
+    "error",
     "handleNetworkReply",
     "QNetworkReply*",
     "reply",
@@ -70,7 +74,8 @@ constexpr auto qt_meta_stringdata_CLASSdatabaseHandlerENDCLASS = QtMocHelpers::s
     "addNewClient",
     "convertToListFromString",
     "text",
-    "checkTableStatus"
+    "checkTableStatus",
+    "getTableOrders"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -83,33 +88,36 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSdatabaseHandlerENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      15,   14, // methods
-       1,  167, // properties
+      18,   14, // methods
+       1,  194, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       6,       // signalCount
+       8,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  104,    2, 0x06,    2 /* Public */,
-       5,    1,  107,    2, 0x06,    4 /* Public */,
-       7,    1,  110,    2, 0x06,    6 /* Public */,
-       8,    2,  113,    2, 0x06,    8 /* Public */,
-      11,    1,  118,    2, 0x06,   11 /* Public */,
-      13,    2,  121,    2, 0x06,   13 /* Public */,
+       1,    1,  122,    2, 0x06,    2 /* Public */,
+       5,    1,  125,    2, 0x06,    4 /* Public */,
+       7,    1,  128,    2, 0x06,    6 /* Public */,
+       8,    2,  131,    2, 0x06,    8 /* Public */,
+      11,    1,  136,    2, 0x06,   11 /* Public */,
+      13,    2,  139,    2, 0x06,   13 /* Public */,
+      16,    1,  144,    2, 0x06,   16 /* Public */,
+      18,    1,  147,    2, 0x06,   18 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      16,    1,  126,    2, 0x08,   16 /* Private */,
+      20,    1,  150,    2, 0x08,   20 /* Private */,
 
  // methods: name, argc, parameters, tag, flags, initial metatype offsets
-      19,    1,  129,    2, 0x02,   18 /* Public */,
-      21,    0,  132,    2, 0x02,   20 /* Public */,
-      22,    1,  133,    2, 0x02,   21 /* Public */,
-      23,    3,  136,    2, 0x02,   23 /* Public */,
-      25,    4,  143,    2, 0x02,   27 /* Public */,
-      30,    4,  152,    2, 0x02,   32 /* Public */,
-      31,    1,  161,    2, 0x02,   37 /* Public */,
-      33,    1,  164,    2, 0x02,   39 /* Public */,
+      23,    1,  153,    2, 0x02,   22 /* Public */,
+      25,    0,  156,    2, 0x02,   24 /* Public */,
+      26,    1,  157,    2, 0x02,   25 /* Public */,
+      27,    3,  160,    2, 0x02,   27 /* Public */,
+      29,    4,  167,    2, 0x02,   31 /* Public */,
+      34,    4,  176,    2, 0x02,   36 /* Public */,
+      35,    1,  185,    2, 0x02,   41 /* Public */,
+      37,    1,  188,    2, 0x02,   43 /* Public */,
+      38,    1,  191,    2, 0x02,   45 /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
@@ -118,19 +126,22 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSdatabaseHandlerENDCLASS[] = {
     QMetaType::Void, QMetaType::Bool, QMetaType::QString,    9,   10,
     QMetaType::Void, QMetaType::QString,   12,
     QMetaType::Void, QMetaType::QString, QMetaType::QString,   14,   15,
+    QMetaType::Void, QMetaType::QVariantList,   17,
+    QMetaType::Void, QMetaType::QString,   19,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 17,   18,
+    QMetaType::Void, 0x80000000 | 21,   22,
 
  // methods: parameters
-    QMetaType::Void, QMetaType::QString,   20,
+    QMetaType::Void, QMetaType::QString,   24,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,   12,
-    QMetaType::Void, QMetaType::QString, 0x80000000 | 3, QMetaType::QString,   20,   24,    6,
-    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::Int,   26,   27,   28,   29,
-    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::Int,   26,   27,   28,   29,
-    0x80000000 | 3, QMetaType::QString,   32,
+    QMetaType::Void, QMetaType::QString, 0x80000000 | 3, QMetaType::QString,   24,   28,    6,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::Int,   30,   31,   32,   33,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::Int,   30,   31,   32,   33,
+    0x80000000 | 3, QMetaType::QString,   36,
     QMetaType::QString, QMetaType::QString,   14,
+    QMetaType::Void, QMetaType::Int,   14,
 
  // properties: name, type, flags
        4, 0x80000000 | 3, 0x00015009, uint(0), 0,
@@ -169,6 +180,12 @@ Q_CONSTINIT const QMetaObject databaseHandler::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'tableOrdersReady'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QVariantList &, std::false_type>,
+        // method 'errorOccurred'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
         // method 'handleNetworkReply'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QNetworkReply *, std::false_type>,
@@ -202,7 +219,10 @@ Q_CONSTINIT const QMetaObject databaseHandler::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'checkTableStatus'
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
-        QtPrivate::TypeAndForceComplete<QString, std::false_type>
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'getTableOrders'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>
     >,
     nullptr
 } };
@@ -219,17 +239,20 @@ void databaseHandler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         case 3: _t->bookingAdded((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
         case 4: _t->codeChecked((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 5: _t->tableStatusChecked((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
-        case 6: _t->handleNetworkReply((*reinterpret_cast< std::add_pointer_t<QNetworkReply*>>(_a[1]))); break;
-        case 7: _t->getBookingsOnDate((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 8: _t->clearBookings(); break;
-        case 9: _t->checkIfUserCodeExists((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 10: _t->addNewBooking((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QList<int>>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[3]))); break;
-        case 11: _t->checkIfClientExists((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4]))); break;
-        case 12: _t->addNewClient((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4]))); break;
-        case 13: { QList<int> _r = _t->convertToListFromString((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])));
+        case 6: _t->tableOrdersReady((*reinterpret_cast< std::add_pointer_t<QVariantList>>(_a[1]))); break;
+        case 7: _t->errorOccurred((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 8: _t->handleNetworkReply((*reinterpret_cast< std::add_pointer_t<QNetworkReply*>>(_a[1]))); break;
+        case 9: _t->getBookingsOnDate((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 10: _t->clearBookings(); break;
+        case 11: _t->checkIfUserCodeExists((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 12: _t->addNewBooking((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QList<int>>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[3]))); break;
+        case 13: _t->checkIfClientExists((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4]))); break;
+        case 14: _t->addNewClient((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4]))); break;
+        case 15: { QList<int> _r = _t->convertToListFromString((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])));
             if (_a[0]) *reinterpret_cast< QList<int>*>(_a[0]) = std::move(_r); }  break;
-        case 14: { QString _r = _t->checkTableStatus((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])));
+        case 16: { QString _r = _t->checkTableStatus((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
+        case 17: _t->getTableOrders((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -242,14 +265,14 @@ void databaseHandler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
                 *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QList<int> >(); break;
             }
             break;
-        case 6:
+        case 8:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 0:
                 *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QNetworkReply* >(); break;
             }
             break;
-        case 10:
+        case 12:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 1:
@@ -301,6 +324,20 @@ void databaseHandler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
                 return;
             }
         }
+        {
+            using _t = void (databaseHandler::*)(const QVariantList & );
+            if (_t _q_method = &databaseHandler::tableOrdersReady; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 6;
+                return;
+            }
+        }
+        {
+            using _t = void (databaseHandler::*)(const QString & );
+            if (_t _q_method = &databaseHandler::errorOccurred; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 7;
+                return;
+            }
+        }
     } else if (_c == QMetaObject::RegisterPropertyMetaType) {
         switch (_id) {
         default: *reinterpret_cast<int*>(_a[0]) = -1; break;
@@ -340,13 +377,13 @@ int databaseHandler::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 15)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 18;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 15)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 18;
     }else if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
             || _c == QMetaObject::ResetProperty || _c == QMetaObject::BindableProperty
             || _c == QMetaObject::RegisterPropertyMetaType) {
@@ -396,5 +433,19 @@ void databaseHandler::tableStatusChecked(QString _t1, QString _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 5, _a);
+}
+
+// SIGNAL 6
+void databaseHandler::tableOrdersReady(const QVariantList & _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
+}
+
+// SIGNAL 7
+void databaseHandler::errorOccurred(const QString & _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 7, _a);
 }
 QT_WARNING_POP

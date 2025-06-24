@@ -54,6 +54,41 @@ namespace _0x5f__endBooking_qml {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
     };
 }
+namespace _0x5f__waiter_main_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f__TablesSchemeForWaiters_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f__OrderInTable_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f__TableInProcess_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _0x5f__RecipeButton_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
 
 }
 namespace {
@@ -75,6 +110,11 @@ Registry::Registry() {
     resourcePathToCachedUnit.insert(QStringLiteral("/BackButton.qml"), &QmlCacheGeneratedCode::_0x5f__BackButton_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/bookForm.qml"), &QmlCacheGeneratedCode::_0x5f__bookForm_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/endBooking.qml"), &QmlCacheGeneratedCode::_0x5f__endBooking_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/waiter_main.qml"), &QmlCacheGeneratedCode::_0x5f__waiter_main_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/TablesSchemeForWaiters.qml"), &QmlCacheGeneratedCode::_0x5f__TablesSchemeForWaiters_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/OrderInTable.qml"), &QmlCacheGeneratedCode::_0x5f__OrderInTable_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/TableInProcess.qml"), &QmlCacheGeneratedCode::_0x5f__TableInProcess_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/RecipeButton.qml"), &QmlCacheGeneratedCode::_0x5f__RecipeButton_qml::unit);
     QQmlPrivate::RegisterQmlUnitCacheHook registration;
     registration.structVersion = 0;
     registration.lookupCachedQmlUnit = &lookupCachedUnit;

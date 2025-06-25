@@ -18,5 +18,7 @@
 <file alias="TableInProcess.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/TableInProcess.qml</file>
 <file alias="recipe.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/recipe.png</file>
 <file alias="RecipeButton.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/RecipeButton.qml</file>
+<file alias="save.png">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/save.png</file>
+<file alias="SaveButton.qml">C:/Users/79627/Desktop/College/Restaraunt/Restaraunt/SaveButton.qml</file>
 </qresource>
 </RCC>

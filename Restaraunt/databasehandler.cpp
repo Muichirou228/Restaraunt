@@ -432,3 +432,30 @@ void databaseHandler::fetchProductsInfo(const QVariantList &productRequests)
     });
 }
 
+void databaseHandler::loadProducts() {
+    QUrl productsUrl("https://qtrestaraunt-default-rtdb.firebaseio.com/products.json");
+    QNetworkReply *reply = m_networkManager->get(QNetworkRequest(productsUrl));
+
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
+            QJsonObject productsObj = jsonDoc.object();
+
+            m_productList.clear();
+            //QStringList result;
+            for (auto it = productsObj.begin(); it != productsObj.end(); ++it) {
+                QJsonObject product = it.value().toObject();
+                if (product.contains("product_name")) {
+                    m_productList.append(product["product_name"].toString());
+                    qDebug() << "Found product with name " << product["product_name"].toString();
+                }
+            }
+            emit productsLoaded();
+        } else {
+            emit errorOccurred(reply->errorString());
+        }
+        reply->deleteLater();
+    });
+}
+

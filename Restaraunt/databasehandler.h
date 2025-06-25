@@ -16,6 +16,7 @@ class databaseHandler : public QObject
     Q_OBJECT
 
     Q_PROPERTY (QList<int> bookedTables READ bookedTables NOTIFY bookingsReady)
+    //Q_PROPERTY(QStringList productList READ productList NOTIFY productsLoaded)
 
 public:
     explicit databaseHandler(QObject *parent = nullptr);
@@ -31,6 +32,10 @@ public:
     Q_INVOKABLE QString checkTableStatus(QString table_num);
 
     Q_INVOKABLE void getTableOrders(int table_num);
+
+    Q_INVOKABLE void loadProducts();
+    Q_INVOKABLE QStringList productList() const { return m_productList; }
+
 signals:
     void bookingsReady(const QList<int> &bookedTables);
     void clientChecked(const QString &id_client);
@@ -38,7 +43,7 @@ signals:
     void bookingAdded(bool result, QString message);
     void codeChecked(QString code);
     void tableStatusChecked(QString table_num, QString status);
-
+    void productsLoaded();
     void tableOrdersReady(const QVariantList &orders);
     void errorOccurred(const QString& error);
 private slots:
@@ -53,6 +58,8 @@ private:
 
     void fetchOrderItems(const QString &orderId);
     void fetchProductsInfo(const QVariantList &productRequests);
+
+    QStringList m_productList;
 };
 
 #endif // DATABASEHANDLER_H

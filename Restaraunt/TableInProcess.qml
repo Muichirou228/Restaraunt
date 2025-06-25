@@ -19,10 +19,24 @@ Rectangle {
         text: "Стол " + table_num.toString()
         font.bold: true
     }
+
     RecipeButton {
         onButtonClicked: {
         }
     }
+
+    SaveButton {
+        onButtonClicked: {
+
+        }
+    }
+
+    BackButton {
+        onButtonClicked: {
+            stackViewForWaiters.pop();
+        }
+    }
+
     OrderInTable {
         id: tableInfo
         anchors {

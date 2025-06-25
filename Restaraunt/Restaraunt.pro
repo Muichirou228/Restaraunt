@@ -25,7 +25,9 @@ RESOURCES += \
         OrderInTable.qml \
         TableInProcess.qml \
         recipe.png \
-        RecipeButton.qml
+        RecipeButton.qml \
+        save.png \
+        SaveButton.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -48,6 +50,7 @@ DISTFILES += \
     CustomCalendar.qml \
     OrderInTable.qml \
     RecipeButton.qml \
+    SaveButton.qml \
     TableInProcess.qml \
     TablesScheme.qml \
     TablesSchemeForWaiters.qml \
@@ -60,6 +63,7 @@ DISTFILES += \
     enter.png \
     image.ico \
     recipe.png \
+    save.png \
     tables_booking.qml \
     tick.png \
     waiter_main.qml

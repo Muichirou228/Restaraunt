@@ -20,8 +20,6 @@ Item {
     function getTableColor(status) {
             switch(status) {
                 case "occupied": return "yellow";
-                //case "reserved": return "orange";
-                //case "dirty": return "brown";
                 default: return "white";
             }
         }

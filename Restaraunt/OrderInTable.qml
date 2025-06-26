@@ -20,9 +20,21 @@ Rectangle {
         onProductsLoaded: {
             dishInput.model = dbHandler.productList();
         }
-        onErrorOccurred: {
-            console.error("Error:", error)
+        // onErrorOccurred: {
+        //     console.error("Error:", error)
+        // }
+    }
+
+    function getTempItemsData() {
+        var items = [];
+        for (var i = 0; i < tempItems.length; i++) {
+            items.push({
+                name: tempItems[i].name,
+                quantity: tempItems[i].quantity
+            });
+            console.log("Temp items name and count = ", tempItems[i].name, tempItems[i].quantity)
         }
+        return items;
     }
 
     Component.onCompleted: {

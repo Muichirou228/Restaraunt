@@ -280,7 +280,7 @@ QString databaseHandler::checkTableStatus(QString table_num) {
 
             // Если есть хотя бы один официант с таким кодом
             if (!waiters.isEmpty()) {
-                qDebug() << "Valid table info found for number " << table_num;
+                //qDebug() << "Valid table info found for number " << table_num;
             }
         }
 
@@ -456,6 +456,454 @@ void databaseHandler::loadProducts() {
             emit errorOccurred(reply->errorString());
         }
         reply->deleteLater();
+    });
+}
+
+void databaseHandler::checkIfOrderExists(int table_num, const QVariantList &items) {
+    QNetworkRequest request(QUrl("https://qtrestaraunt-default-rtdb.firebaseio.com/tables.json"));
+    QNetworkReply *reply = m_networkManager->get(request);
+
+    connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() != QNetworkReply::NoError) {
+            emit errorOccurred("Ошибка сети: " + reply->errorString());
+            reply->deleteLater();
+            return;
+        }
+        QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+        QJsonObject tables = doc.object();
+        bool orderExisting = true;
+        QString tableNUM = QString::number(table_num);
+        for (const QString &tableKey : tables.keys()) {
+            QJsonObject table = tables.value(tableKey).toObject();
+
+            if (table["table_num"].toString() == tableNUM) {
+                if (table["id_waiter"] == "NULL" &&
+                    table["order_num"] == "NULL") {
+                    orderExisting = false;
+                }
+                break;
+            }
+        }
+        qDebug() << "OrderExisting is " << orderExisting;
+        emit orderExistingChecked(orderExisting, items);
+        reply->deleteLater();
+    });
+}
+
+void databaseHandler::findWaiterIdByName(const QString &waiterName, int table_num, const QVariantList &items)
+{
+    QNetworkRequest request(QUrl("https://qtrestaraunt-default-rtdb.firebaseio.com/waiters.json"));
+    QNetworkReply *reply = m_networkManager->get(request);
+
+    connect(reply, &QNetworkReply::finished, [=]() {
+        QString foundId;
+        if (reply->error() == QNetworkReply::NoError) {
+            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+            QJsonObject waiters = doc.object();
+
+            for (const QString &waiterId : waiters.keys()) {
+                QJsonObject waiter = waiters.value(waiterId).toObject();
+                if (waiter["name"].toString().compare(waiterName, Qt::CaseInsensitive) == 0) {
+                    foundId = waiterId;
+                    qDebug() << "Found waiter with id " << foundId;
+                    break;
+                }
+            }
+        }
+        addOrderInTable(table_num, foundId, items);
+        reply->deleteLater();
+    });
+}
+
+void databaseHandler::addOrderInTable(int table_num, QString id_waiter, const QVariantList &items)
+{
+    // Проверка инициализации
+    if (!m_networkManager) {
+        emit errorOccurred("Network manager not initialized");
+        return;
+    }
+
+    // Проверка входных параметров
+    if (table_num <= 0) {
+        emit errorOccurred("Invalid table number");
+        return;
+    }
+
+    if (id_waiter.isEmpty()) {
+        emit errorOccurred("Waiter ID is empty");
+        return;
+    }
+
+    // Преобразуем номер стола в строку
+    QString tableNumStr = QString::number(table_num);
+
+    // Генерация ID нового заказа
+    const QString newOrderId = generateOrderId();
+
+    // Создание объекта заказа
+    QJsonObject newOrder;
+    newOrder["status"] = "cooking";
+
+    // Базовый URL Firebase
+    const QString baseUrl = "https://qtrestaraunt-default-rtdb.firebaseio.com/";
+
+    // 1. Поиск стола по номеру (как строке)
+    QUrl findTableUrl(baseUrl + "tables.json");
+    QString query = QString("orderBy=\"table_num\"&equalTo=\"%1\"").arg(tableNumStr);
+    findTableUrl.setQuery(query);
+
+    QNetworkRequest findRequest(findTableUrl);
+    findRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *findReply = m_networkManager->get(findRequest);
+    findReply->setParent(this);
+
+    connect(findReply, &QNetworkReply::finished, this, [=]() {
+        QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> replyGuard(findReply);
+
+        if (findReply->error() != QNetworkReply::NoError) {
+            emit errorOccurred("Table search error: " + findReply->errorString());
+            return;
+        }
+
+        // Парсинг ответа
+        QJsonParseError parseError;
+        QJsonDocument tableDoc = QJsonDocument::fromJson(findReply->readAll(), &parseError);
+
+        if (parseError.error != QJsonParseError::NoError) {
+            emit errorOccurred("JSON parse error: " + parseError.errorString());
+            return;
+        }
+
+        QJsonObject tables = tableDoc.object();
+        QString tableKey;
+
+        // Поиск ключа таблицы (сравниваем как строки)
+        for (const QString &key : tables.keys()) {
+            QJsonObject table = tables.value(key).toObject();
+            qDebug() << "Checking table:" << table["table_num"].toString();
+
+            if (table["table_num"].toString() == tableNumStr) {
+                tableKey = key;
+                break;
+            }
+        }
+
+        if (tableKey.isEmpty()) {
+            emit errorOccurred(QString("Table %1 not found").arg(tableNumStr));
+            qDebug() << "Available tables data:" << tables;
+            return;
+        }
+
+        // 2. Создание нового заказа
+        QNetworkRequest orderRequest(QUrl(baseUrl + "orders/" + newOrderId + ".json"));
+        orderRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+        QNetworkReply *orderReply = m_networkManager->put(orderRequest, QJsonDocument(newOrder).toJson());
+        orderReply->setParent(this);
+
+        connect(orderReply, &QNetworkReply::finished, this, [=]() {
+            QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> orderGuard(orderReply);
+
+            if (orderReply->error() != QNetworkReply::NoError) {
+                emit errorOccurred("Order creation error: " + orderReply->errorString());
+                return;
+            }
+
+            // 3. Обновление информации о столе
+            QJsonObject tableUpdate;
+            tableUpdate["order_num"] = newOrderId;
+            tableUpdate["id_waiter"] = id_waiter;
+            tableUpdate["status"] = "occupied";
+            tableUpdate["id_booking"] = "NULL";
+            tableUpdate["table_num"] = tableNumStr; // Сохраняем как строку
+
+            QNetworkRequest tableRequest(QUrl(baseUrl + "tables/" + tableKey + ".json"));
+            tableRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+            QNetworkReply *tableReply = m_networkManager->put(
+                tableRequest,
+                QJsonDocument(tableUpdate).toJson()
+                );
+            tableReply->setParent(this);
+
+            connect(tableReply, &QNetworkReply::finished, this, [=]() {
+                QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> tableGuard(tableReply);
+
+                if (tableReply->error() != QNetworkReply::NoError) {
+                    emit errorOccurred("Table update error: " + tableReply->errorString());
+                } else {
+                    // 4. Создание записи в order_items
+                    QNetworkRequest orderItemsRequest(QUrl(baseUrl + "order-items/" + newOrderId + ".json"));
+                    orderItemsRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+                    // Создаем пустой объект для нового заказа
+                    QJsonObject newOrderItem;
+                    newOrderItem["status"] = "created";
+
+                    QNetworkReply *orderItemsReply = m_networkManager->put(
+                        orderItemsRequest,
+                        QJsonDocument(newOrderItem).toJson()
+                        );
+                    orderItemsReply->setParent(this);
+
+                    connect(orderItemsReply, &QNetworkReply::finished, this, [=]() {
+                        QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> itemsGuard(orderItemsReply);
+
+                        if (orderItemsReply->error() != QNetworkReply::NoError) {
+                            emit errorOccurred("Order items creation error: " + orderItemsReply->errorString());
+                        } else {
+                            emit newOrderAddedInTable(table_num);
+                            qDebug() << "Successfully created order" << newOrderId << "in order-items";
+                            addOrderItems(newOrderId, items);
+                        }
+                    });
+                }
+            });
+        });
+    });
+}
+
+QString databaseHandler::generateOrderId() const
+{
+    return "order_" + QString::number(QDateTime::currentMSecsSinceEpoch());
+}
+
+
+void databaseHandler::addOrderItems(const QString &orderId, const QVariantList &items)
+{
+    if (!m_networkManager) {
+        qWarning() << "Network manager not initialized";
+        //emit orderItemsAdded();
+        return;
+    }
+
+    if (orderId.isEmpty() || items.isEmpty()) {
+        qWarning() << "Invalid input parameters";
+        //emit orderItemsAdded();
+        return;
+    }
+
+    // 1. Сначала получаем все продукты
+    QNetworkRequest productsRequest(QUrl("https://qtrestaraunt-default-rtdb.firebaseio.com/products.json"));
+    QNetworkReply *productsReply = m_networkManager->get(productsRequest);
+
+    connect(productsReply, &QNetworkReply::finished, this, [=]() {
+        QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> productsGuard(productsReply);
+
+        if (productsReply->error() != QNetworkReply::NoError) {
+            qWarning() << "Failed to load products:" << productsReply->errorString();
+            //emit orderItemsAdded();
+            return;
+        }
+
+        QJsonParseError parseError;
+        QJsonDocument productsDoc = QJsonDocument::fromJson(productsReply->readAll(), &parseError);
+        if (parseError.error != QJsonParseError::NoError) {
+            qWarning() << "Failed to parse products:" << parseError.errorString();
+            //emit orderItemsAdded();
+            return;
+        }
+
+        QJsonObject products = productsDoc.object();
+        QMap<QString, QString> productNameToIdMap;
+
+        // Создаем карту соответствия имени продукта к его ID
+        for (const QString &productId : products.keys()) {
+            QJsonObject product = products[productId].toObject();
+            QString productName = product["product_name"].toString();
+            productNameToIdMap[productName] = productId;
+        }
+
+        // 2. Получаем текущие items заказа, чтобы определить следующий индекс
+        QNetworkRequest orderItemsRequest(QUrl(
+            QString("https://qtrestaraunt-default-rtdb.firebaseio.com/order-items/%1.json").arg(orderId)));
+        QNetworkReply *orderItemsReply = m_networkManager->get(orderItemsRequest);
+
+        connect(orderItemsReply, &QNetworkReply::finished, this, [=]() mutable {
+            QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> itemsGuard(orderItemsReply);
+
+            int baseIndex = 0;
+            if (orderItemsReply->error() == QNetworkReply::NoError) {
+                QJsonDocument doc = QJsonDocument::fromJson(orderItemsReply->readAll());
+                if (doc.isObject()) {
+                    baseIndex = doc.object().count();
+                }
+            }
+
+            // 3. Добавляем каждый item с правильным product_id
+            int addedCount = 0;
+            for (int i = 0; i < items.count(); ++i) {
+                QVariantMap item = items[i].toMap();
+                QString productName = item["name"].toString();
+                QString productId = productNameToIdMap.value(productName, "");
+
+                if (productId.isEmpty()) {
+                    qWarning() << "Product not found:" << productName;
+                    continue;
+                }
+
+                QString itemKey = QString("item%1").arg(baseIndex + i + 1);
+                QJsonObject itemData;
+                itemData["id_product"] = productId;
+                itemData["product_count"] = item["quantity"].toInt();
+
+                QUrl itemUrl(QString("https://qtrestaraunt-default-rtdb.firebaseio.com/order-items/%1/%2.json")
+                                 .arg(orderId, itemKey));
+
+                QNetworkRequest itemRequest(itemUrl);
+                itemRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+                QNetworkReply *itemReply = m_networkManager->put(
+                    itemRequest,
+                    QJsonDocument(itemData).toJson()
+                    );
+
+                connect(itemReply, &QNetworkReply::finished, this, [=]() mutable {
+                    itemReply->deleteLater();
+                    addedCount++;
+
+                    if (itemReply->error() != QNetworkReply::NoError) {
+                        qWarning() << "Failed to add item:" << itemReply->errorString();
+                    }
+
+                    if (addedCount == items.count()) {
+                        qDebug() << "Successfully added all items for order:" << orderId;
+                        emit orderItemsAdded();
+                    }
+                });
+            }
+        });
+    });
+}
+
+void databaseHandler::addOrderItemsForQML(const QString &table_num, const QVariantList &items) {
+    if (!m_networkManager) {
+        //emit orderItemsAdded();
+        return;
+    }
+
+    // 1. Сначала получаем все продукты
+    QNetworkRequest productsRequest(QUrl("https://qtrestaraunt-default-rtdb.firebaseio.com/products.json"));
+    QNetworkReply *productsReply = m_networkManager->get(productsRequest);
+
+    connect(productsReply, &QNetworkReply::finished, this, [=]() {
+        QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> productsGuard(productsReply);
+
+        if (productsReply->error() != QNetworkReply::NoError) {
+            emit errorOccurred("Ошибка загрузки продуктов: " + productsReply->errorString());
+            //emit orderItemsAdded();
+            return;
+        }
+
+        QJsonParseError parseError;
+        QJsonDocument productsDoc = QJsonDocument::fromJson(productsReply->readAll(), &parseError);
+        if (parseError.error != QJsonParseError::NoError) {
+            emit errorOccurred("Ошибка парсинга продуктов: " + parseError.errorString());
+            //emit orderItemsAdded();
+            return;
+        }
+
+        QJsonObject products = productsDoc.object();
+        QMap<QString, QString> productNameToIdMap;
+
+        // Создаем карту соответствия имени продукта к его ID
+        for (const QString &productId : products.keys()) {
+            QJsonObject product = products[productId].toObject();
+            QString productName = product["product_name"].toString();
+            productNameToIdMap[productName] = productId;
+        }
+
+        // 2. Теперь находим заказ для стола
+        QNetworkRequest tablesRequest(QUrl("https://qtrestaraunt-default-rtdb.firebaseio.com/tables.json"));
+        QNetworkReply *tablesReply = m_networkManager->get(tablesRequest);
+
+        connect(tablesReply, &QNetworkReply::finished, this, [=]() mutable {
+            QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> tablesGuard(tablesReply);
+
+            if (tablesReply->error() != QNetworkReply::NoError) {
+                emit errorOccurred("Ошибка загрузки столов: " + tablesReply->errorString());
+                //emit orderItemsAdded();
+                return;
+            }
+
+            QJsonDocument tablesDoc = QJsonDocument::fromJson(tablesReply->readAll());
+            QString orderNum;
+
+            // Ищем заказ для указанного стола
+            for (const QString &tableKey : tablesDoc.object().keys()) {
+                QJsonObject table = tablesDoc.object()[tableKey].toObject();
+                if (table["table_num"] == table_num) {
+                    orderNum = table["order_num"].toString();
+                    break;
+                }
+            }
+
+            if (orderNum.isEmpty() || orderNum == "NULL") {
+                //emit tableOrderNotFound();
+                //emit orderItemsAdded();
+                return;
+            }
+
+            // 3. Добавляем items с правильными product_id
+            QNetworkRequest orderItemsRequest(QUrl(
+                QString("https://qtrestaraunt-default-rtdb.firebaseio.com/order-items/%1.json").arg(orderNum)));
+            QNetworkReply *orderItemsReply = m_networkManager->get(orderItemsRequest);
+
+            connect(orderItemsReply, &QNetworkReply::finished, this, [=]() mutable {
+                QScopedPointer<QNetworkReply, QScopedPointerDeleteLater> itemsGuard(orderItemsReply);
+
+                int baseIndex = 0;
+                if (orderItemsReply->error() == QNetworkReply::NoError) {
+                    QJsonDocument doc = QJsonDocument::fromJson(orderItemsReply->readAll());
+                    if (doc.isObject()) {
+                        baseIndex = doc.object().count();
+                    }
+                }
+
+                // Добавляем каждый item
+                int addedCount = 0;
+                for (int i = 0; i < items.count(); ++i) {
+                    QVariantMap item = items[i].toMap();
+                    QString productName = item["name"].toString();
+                    QString productId = productNameToIdMap.value(productName, "");
+
+                    if (productId.isEmpty()) {
+                        //emit productNotFound(productName);
+                        continue;
+                    }
+
+                    QString itemKey = QString("item%1").arg(baseIndex + i + 1);
+                    QJsonObject itemData;
+                    itemData["id_product"] = productId;
+                    itemData["product_count"] = item["quantity"].toInt();
+
+                    QUrl itemUrl(QString("https://qtrestaraunt-default-rtdb.firebaseio.com/order-items/%1/%2.json")
+                                     .arg(orderNum, itemKey));
+
+                    QNetworkRequest itemRequest(itemUrl);
+                    itemRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+                    QNetworkReply *itemReply = m_networkManager->put(
+                        itemRequest,
+                        QJsonDocument(itemData).toJson()
+                        );
+
+                    connect(itemReply, &QNetworkReply::finished, this, [=]() mutable {
+                        itemReply->deleteLater();
+                        addedCount++;
+
+                        if (itemReply->error() != QNetworkReply::NoError) {
+                            qWarning() << "Ошибка добавления item:" << itemReply->errorString();
+                        }
+
+                        if (addedCount == items.count()) {
+                            emit orderItemsAdded();
+                        }
+                    });
+                }
+            });
+        });
     });
 }
 

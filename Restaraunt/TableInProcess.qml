@@ -4,9 +4,8 @@ Rectangle {
     color: "black"
     Component.onCompleted: {
         dbHandler.getTableOrders(table_num);
-        //console.log("table num = ", table_num)
     }
-
+    property string waiter_name: ""
     property int table_num : 0
     Text {
         id: tableText
@@ -26,10 +25,15 @@ Rectangle {
     }
 
     SaveButton {
-        onButtonClicked: {
-
+            onButtonClicked: {
+                console.log(tableInfo.tempItems.length.toString());
+                if (tableInfo.tempItems.length !== 0) {
+                    console.log ("Waiter name = ", waiter_name);
+                    var ttt = tableInfo.getTempItemsData();
+                    dbHandler.checkIfOrderExists(table_num, tableInfo.getTempItemsData());
+                }
+            }
         }
-    }
 
     BackButton {
         onButtonClicked: {
@@ -51,6 +55,21 @@ Rectangle {
         target: dbHandler
         onTableOrdersReady: (orderItems) => {
             tableInfo.ordersModel = orderItems;
+        }
+        onOrderItemsAdded: {
+            stackViewForWaiters.pop();
+        }
+        onOrderExistingChecked: (result, items) => {
+            if (result) {
+                dbHandler.addOrderItemsForQML(table_num.toString(), items);
+                console.log("table number = ", table_num.toString());
+            } else {
+                dbHandler.findWaiterIdByName(waiter_name, table_num, items);
+            }
+        }
+
+        onErrorOccurred: function(message) {
+            console.error("Database error:", message);
         }
     }
 }

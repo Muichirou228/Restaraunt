@@ -20,6 +20,7 @@ Item {
     function getTableColor(status) {
             switch(status) {
                 case "occupied": return "yellow";
+                case "free": return "white";
                 default: return "white";
             }
         }
@@ -27,6 +28,11 @@ Item {
             target: dbHandler
             onTableStatusChecked: function(tableNum, status) {
                 updateTableStatus(tableNum, status);
+            }
+            onOrderItemsAdded: {
+                for (var i = 1; i <= 20; i++) {
+                    dbHandler.checkTableStatus(i.toString());
+                }
             }
         }
 

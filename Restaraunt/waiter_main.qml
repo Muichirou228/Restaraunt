@@ -9,6 +9,7 @@ Window {
     minimumHeight: 800
     visible: true
     color: "black"
+
     property string waiterName : ""
 
     StackView {
@@ -20,6 +21,7 @@ Window {
         id: waiterWindowComp
         Item {
             Text {
+                id: waiterText
                 color: "white"
                 anchors {
                     left: parent.left
@@ -35,7 +37,8 @@ Window {
             TablesSchemeForWaiters{
                 id: tables
                 onTableClicked: (tableNum) => {
-                    stackViewForWaiters.push("../TableInProcess.qml", {table_num : tableNum})
+                    stackViewForWaiters.push("../TableInProcess.qml", {table_num : tableNum , waiter_name : waiterName}
+                    )
                 }
             }
         }

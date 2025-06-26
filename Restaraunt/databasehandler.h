@@ -30,11 +30,15 @@ public:
     Q_INVOKABLE void addNewClient (QString firstName, QString secondName, QString thirdName, int age);
     Q_INVOKABLE QList<int> convertToListFromString(QString text);
     Q_INVOKABLE QString checkTableStatus(QString table_num);
-
     Q_INVOKABLE void getTableOrders(int table_num);
-
     Q_INVOKABLE void loadProducts();
     Q_INVOKABLE QStringList productList() const { return m_productList; }
+
+    Q_INVOKABLE void addOrderItemsForQML(const QString &table_num, const QVariantList &items);
+    void addOrderItems(const QString &orderId, const QVariantList &items);
+    Q_INVOKABLE void checkIfOrderExists (int table_num, const QVariantList &items);
+    void addOrderInTable (int table_num, QString id_waiter, const QVariantList &items);
+    Q_INVOKABLE void findWaiterIdByName (const QString &waiterName, int table_num, const QVariantList &items);
 
 signals:
     void bookingsReady(const QList<int> &bookedTables);
@@ -46,6 +50,12 @@ signals:
     void productsLoaded();
     void tableOrdersReady(const QVariantList &orders);
     void errorOccurred(const QString& error);
+
+    void orderExistingChecked(bool isExisting, const QVariantList &items);
+
+    void newOrderAddedInTable(int table_num);
+
+    void orderItemsAdded();
 private slots:
     void handleNetworkReply(QNetworkReply *reply);
 private:
@@ -60,6 +70,8 @@ private:
     void fetchProductsInfo(const QVariantList &productRequests);
 
     QStringList m_productList;
+
+    QString generateOrderId() const;
 };
 
 #endif // DATABASEHANDLER_H
